@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: simaruk-app
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-simaruk}
+      - DB_USERNAME=${DB_USERNAME:-simaruk_user}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+    networks:
+      - simaruk_network
+
+  web:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - simaruk_network
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-simaruk}
+      MYSQL_USER: ${DB_USERNAME:-simaruk_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_secret}
+    ports:
+      - "3307:3306"
+    volumes:
+      - simaruk_mysql_data:/var/lib/mysql
+    networks:
+      - simaruk_network
+
+networks:
+  simaruk_network:
+    driver: bridge
+
+volumes:
+  simaruk_mysql_data:
