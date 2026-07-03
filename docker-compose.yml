@@ -18,6 +18,8 @@ services:
       - DB_DATABASE=${DB_DATABASE:-simaruk}
       - DB_USERNAME=${DB_USERNAME:-simaruk_user}
       - DB_PASSWORD=${DB_PASSWORD:-secret}
+    volumes:
+      - ./storage:/var/www/html/storage
     networks:
       - simaruk_network
 
