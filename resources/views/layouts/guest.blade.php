@@ -7,7 +7,7 @@
         <meta name="description" content="SIMARUK - Sistem Informasi Manajemen Ruangan & Kegiatan">
 
         <title>{{ config('app.name', 'SIMARUK') }}</title>
-        <link rel="icon" href="{{ asset('logo1.png') }}" type="image/png">
+        <link rel="icon" href="{{ asset('img/logo1.png') }}" type="image/png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
