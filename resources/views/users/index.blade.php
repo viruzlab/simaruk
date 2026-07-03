@@ -90,7 +90,7 @@
                     <tr class="bg-surface-50 border-b border-surface-200/60">
                         <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider">Pengguna</th>
                         <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider">NIM/NIP</th>
-                        <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider">Program Studi</th>
+                        <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider">Program Studi / Unit</th>
                         <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider">Peran</th>
                         <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-xs font-bold text-surface-500 uppercase tracking-wider text-right">Aksi</th>

@@ -89,10 +89,10 @@
                     </div>
                     <div class="p-6">
                         <div>
-                            <label for="study_program" class="block text-sm font-semibold text-surface-700 mb-2">Program Studi</label>
+                            <label for="study_program" class="block text-sm font-semibold text-surface-700 mb-2">Program Studi / Unit</label>
                             <select name="study_program" id="study_program"
                                 class="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-surface-900 focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all">
-                                <option value="">-- Pilih Program Studi --</option>
+                                <option value="">-- Pilih Program Studi / Unit --</option>
                                 @foreach($studyPrograms as $program)
                                     <option value="{{ $program }}" {{ old('study_program', $user->study_program) === $program ? 'selected' : '' }}>{{ $program }}</option>
                                 @endforeach

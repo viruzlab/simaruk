@@ -104,7 +104,7 @@
                         <p class="text-sm text-surface-900 font-mono">{{ $user->nim_nip ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-surface-400 uppercase tracking-widest mb-1">Program Studi</p>
+                        <p class="text-[10px] font-bold text-surface-400 uppercase tracking-widest mb-1">Program Studi / Unit</p>
                         <p class="text-sm text-surface-900">{{ $user->study_program ?? '-' }}</p>
                     </div>
                     <div>

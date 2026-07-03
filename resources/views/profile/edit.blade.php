@@ -172,7 +172,7 @@
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0);">
                             <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                         </div>
-                        <h3 class="font-semibold text-surface-900">Program Studi</h3>
+                        <h3 class="font-semibold text-surface-900">Program Studi / Unit</h3>
                     </div>
                 </div>
                 
@@ -181,9 +181,9 @@
                     <form action="{{ route('study-programs.store') }}" method="POST">
                         @csrf
                         <div class="flex flex-col gap-2">
-                            <label for="name" class="text-xs font-semibold text-surface-600">Tambah Program Studi Baru</label>
+                            <label for="name" class="text-xs font-semibold text-surface-600">Tambah Program Studi / Unit Baru</label>
                             <div class="flex gap-2">
-                                <input type="text" name="name" id="name" required class="flex-1 px-3 py-2 text-sm bg-white border border-surface-200 rounded-lg text-surface-900 focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all" placeholder="Nama program studi...">
+                                <input type="text" name="name" id="name" required class="flex-1 px-3 py-2 text-sm bg-white border border-surface-200 rounded-lg text-surface-900 focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all" placeholder="Nama program studi / unit...">
                                 <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm">
                                     Tambah
                                 </button>
