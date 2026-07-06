@@ -366,7 +366,23 @@
         </div>
 
         <!-- Calendar Modal (Alpine Component) -->
-        <div x-data="{ open: false, event: {} }"
+        <div x-data="{ 
+                open: false, 
+                event: {},
+                formatWaktu() {
+                    if (!this.event.start) return '-';
+                    const start = new Date(this.event.start);
+                    const end = this.event.end ? new Date(this.event.end) : null;
+                    const startStr = start.toLocaleString('id-ID', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+                    if (!end) return startStr;
+                    const sameDay = start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth() && start.getDate() === end.getDate();
+                    if (sameDay) {
+                        return startStr + ' s/d ' + end.toLocaleString('id-ID', {hour: '2-digit', minute: '2-digit'});
+                    } else {
+                        return startStr + ' s/d ' + end.toLocaleString('id-ID', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+                    }
+                }
+            }"
             @open-event-modal.window="
                     event = $event.detail.event;
                     open = true;
@@ -415,13 +431,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Waktu</p>
-                            <p class="text-sm font-medium text-surface-900">
-                                <span
-                                    x-text="new Date(event.start).toLocaleString('id-ID', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})"></span>
-                                s/d
-                                <span
-                                    x-text="new Date(event.end).toLocaleString('id-ID', {hour: '2-digit', minute: '2-digit'})"></span>
-                            </p>
+                            <p class="text-sm font-medium text-surface-900" x-text="formatWaktu()"></p>
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Tujuan</p>
