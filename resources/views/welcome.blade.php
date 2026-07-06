@@ -401,6 +401,10 @@
 
                     <div class="p-6 space-y-4">
                         <div>
+                            <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Nama Kegiatan</p>
+                            <p class="text-sm font-medium text-surface-900" x-text="event.extendedProps?.activity_name || '-'"></p>
+                        </div>
+                        <div>
                             <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Ruangan</p>
                             <p class="text-sm font-medium text-surface-900" x-text="event.extendedProps?.room"></p>
                         </div>
