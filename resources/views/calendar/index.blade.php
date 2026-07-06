@@ -130,10 +130,26 @@
             event: { title: '', start: '', end: '', purpose: '', status: '', room: '', user: '', color: '', activity_name: '' },
             showEvent(info) {
                 const e = info.event;
+                const startDate = e.start;
+                const endDate = e.end;
+                const startStr = startDate.toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+                
+                let endStr = '-';
+                if (endDate) {
+                    const sameDay = startDate.getFullYear() === endDate.getFullYear() 
+                                 && startDate.getMonth() === endDate.getMonth() 
+                                 && startDate.getDate() === endDate.getDate();
+                    if (sameDay) {
+                        endStr = endDate.toLocaleString('id-ID', { hour: '2-digit', minute:'2-digit' });
+                    } else {
+                        endStr = endDate.toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+                    }
+                }
+
                 this.event = {
                     title: e.title,
-                    start: e.start.toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' }),
-                    end: e.end ? e.end.toLocaleString('id-ID', { hour: '2-digit', minute:'2-digit' }) : '-',
+                    start: startStr,
+                    end: endStr,
                     purpose: e.extendedProps.purpose,
                     status: e.extendedProps.status,
                     room: e.extendedProps.room,
@@ -187,7 +203,7 @@
                     <div>
                         <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Waktu</p>
                         <p class="text-sm font-medium text-surface-900">
-                            <span x-text="event.start"></span> - <span x-text="event.end"></span>
+                            <span x-text="event.start"></span> s/d <span x-text="event.end"></span>
                         </p>
                     </div>
                     <div>
