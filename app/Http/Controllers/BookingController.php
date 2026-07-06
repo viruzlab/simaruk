@@ -68,7 +68,15 @@ class BookingController extends Controller
             ]);
         }
 
-        Booking::create($validated);
+        $booking = Booking::create($validated);
+
+        // Notify admins
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\BookingStatusNotification(
+            $booking, 
+            'Pengajuan baru dari ' . auth()->user()->name . " untuk kegiatan '" . $booking->activity_name . "' menunggu persetujuan."
+        ));
+
         return redirect()->route('bookings.index')->with('success', 'Pengajuan peminjaman berhasil dibuat, menunggu persetujuan.');
     }
 

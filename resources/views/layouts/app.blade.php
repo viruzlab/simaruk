@@ -131,5 +131,36 @@
              @click="sidebarOpen = false"
              class="fixed inset-0 bg-black/50 z-40 lg:hidden">
         </div>
+
+        <!-- Toast Notification Popup untuk Admin -->
+        @if(auth()->user()->role === 'admin' && isset($notifications) && $notifications->count() > 0)
+            <div x-data="{ showToast: true }"
+                 x-show="showToast"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 translate-y-4"
+                 class="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-white rounded-xl shadow-2xl border border-primary-200 p-4 flex items-start gap-4 animate-bounce-short">
+                
+                <div class="flex-shrink-0 bg-primary-100 text-primary-600 rounded-full p-2 mt-0.5">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </div>
+                
+                <div class="flex-1">
+                    <p class="text-sm font-bold text-surface-900">Anda memiliki {{ $notifications->count() }} notifikasi baru!</p>
+                    <p class="text-sm text-surface-500 mt-1">Ada pengajuan peminjaman yang menunggu persetujuan Anda. Buka menu lonceng di atas.</p>
+                </div>
+                
+                <button @click="showToast = false" class="text-surface-400 hover:text-surface-600 transition-colors p-1">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        @endif
     </body>
 </html>
