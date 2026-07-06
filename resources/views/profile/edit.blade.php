@@ -45,6 +45,15 @@
                             @error('username') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                         </div>
 
+                        <div>
+                            <label for="telegram_chat_id" class="block text-sm font-semibold text-surface-700 mb-2">Telegram Chat ID <span class="font-normal text-surface-500">(Opsional)</span></label>
+                            <input id="telegram_chat_id" name="telegram_chat_id" type="text" class="w-full px-4 py-2.5 bg-surface-50 border border-surface-200 rounded-xl text-surface-900 focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all" value="{{ old('telegram_chat_id', $user->telegram_chat_id) }}" placeholder="Contoh: 123456789" />
+                            <p class="mt-2 text-xs text-surface-500">
+                                Isi dengan Chat ID Anda untuk menerima notifikasi peminjaman. Dapatkan Chat ID dengan mengirim pesan <b>/start</b> ke bot <b>@userinfobot</b> di aplikasi Telegram Anda.
+                            </p>
+                            @error('telegram_chat_id') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                        </div>
+
                         <div class="flex items-center gap-4 pt-2">
                             <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-all shadow-sm hover:shadow hover:-translate-y-0.5">
                                 Simpan Perubahan
