@@ -70,12 +70,27 @@ class BookingController extends Controller
 
         $booking = Booking::create($validated);
 
-        // Notify admins
+        // Notify admins (Database & Telegram)
         $admins = \App\Models\User::where('role', 'admin')->get();
-        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\BookingStatusNotification(
-            $booking, 
-            'Pengajuan baru dari ' . auth()->user()->name . " untuk kegiatan '" . $booking->activity_name . "' menunggu persetujuan."
-        ));
+        
+        $telegramService = new \App\Services\TelegramService();
+        $message = "🔔 <b>PENGAJUAN BARU</b>\n\n"
+                 . "<b>User:</b> " . auth()->user()->name . "\n"
+                 . "<b>Kegiatan:</b> " . $booking->activity_name . "\n"
+                 . "<b>Ruangan:</b> " . ($booking->room ? $booking->room->name : 'Unknown') . "\n"
+                 . "<b>Waktu:</b> " . \Carbon\Carbon::parse($booking->start_time)->format('d M Y, H:i') . " - " . \Carbon\Carbon::parse($booking->end_time)->format('H:i') . "\n\n"
+                 . "Silakan cek di web Simaruk untuk menyetujui.";
+
+        foreach ($admins as $admin) {
+            $admin->notify(new \App\Notifications\BookingStatusNotification(
+                $booking, 
+                'Pengajuan baru dari ' . auth()->user()->name . " untuk kegiatan '" . $booking->activity_name . "' menunggu persetujuan."
+            ));
+            
+            if ($admin->telegram_chat_id) {
+                $telegramService->sendToUser($admin, $message);
+            }
+        }
 
         return redirect()->route('bookings.index')->with('success', 'Pengajuan peminjaman berhasil dibuat, menunggu persetujuan.');
     }
@@ -97,6 +112,17 @@ class BookingController extends Controller
 
         $booking->user->notify(new BookingStatusNotification($booking, 'Peminjaman ruangan Anda telah disetujui.'));
 
+        // Telegram Notification for User
+        if ($booking->user && $booking->user->telegram_chat_id) {
+            $telegramService = new \App\Services\TelegramService();
+            $message = "✅ <b>PENGAJUAN DISETUJUI</b>\n\n"
+                     . "Halo <b>" . $booking->user->name . "</b>,\n"
+                     . "Pengajuan peminjaman ruangan Anda untuk kegiatan <b>" . $booking->activity_name . "</b> telah disetujui oleh Admin.\n\n"
+                     . "Catatan Admin: " . ($request->admin_notes ?: "-");
+            
+            $telegramService->sendToUser($booking->user, $message);
+        }
+
         return redirect()->back()->with('success', 'Peminjaman disetujui.');
     }
 
@@ -108,6 +134,17 @@ class BookingController extends Controller
         ]);
 
         $booking->user->notify(new BookingStatusNotification($booking, 'Peminjaman ruangan Anda ditolak.'));
+
+        // Telegram Notification for User
+        if ($booking->user && $booking->user->telegram_chat_id) {
+            $telegramService = new \App\Services\TelegramService();
+            $message = "❌ <b>PENGAJUAN DITOLAK</b>\n\n"
+                     . "Halo <b>" . $booking->user->name . "</b>,\n"
+                     . "Mohon maaf, pengajuan peminjaman ruangan Anda untuk kegiatan <b>" . $booking->activity_name . "</b> telah ditolak oleh Admin.\n\n"
+                     . "Alasan/Catatan: " . ($request->admin_notes ?: "-");
+            
+            $telegramService->sendToUser($booking->user, $message);
+        }
 
         return redirect()->back()->with('success', 'Peminjaman ditolak.');
     }

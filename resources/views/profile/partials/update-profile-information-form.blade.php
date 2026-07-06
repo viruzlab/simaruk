@@ -29,6 +29,16 @@
             <x-input-error class="mt-2" :messages="$errors->get('username')" />
         </div>
 
+        <div>
+            <x-input-label for="telegram_chat_id" :value="__('Telegram Chat ID (Opsional)')" />
+            <x-text-input id="telegram_chat_id" name="telegram_chat_id" type="text" class="mt-1 block w-full" :value="old('telegram_chat_id', $user->telegram_chat_id)" />
+            <p class="mt-1 text-xs text-gray-500">
+                Isi dengan Chat ID Telegram Anda untuk menerima notifikasi peminjaman. 
+                Anda bisa mendapatkan Chat ID dengan chat <b>@userinfobot</b> di Telegram lalu ketik <b>/start</b>.
+            </p>
+            <x-input-error class="mt-2" :messages="$errors->get('telegram_chat_id')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
