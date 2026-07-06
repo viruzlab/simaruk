@@ -12,12 +12,12 @@ class BookingController extends Controller
     public function index()
     {
         if (auth()->user()->role === 'admin') {
-            $bookings = Booking::with(['user', 'room'])->latest()->get();
+            $bookings = Booking::with(['user', 'room'])->latest()->paginate(10);
             $totalPending = Booking::where('status', 'pending')->count();
             $totalApproved = Booking::where('status', 'approved')->count();
             $totalRejected = Booking::where('status', 'rejected')->count();
         } else {
-            $bookings = Booking::with('room')->where('user_id', auth()->id())->latest()->get();
+            $bookings = Booking::with('room')->where('user_id', auth()->id())->latest()->paginate(10);
             $totalPending = Booking::where('user_id', auth()->id())->where('status', 'pending')->count();
             $totalApproved = Booking::where('user_id', auth()->id())->where('status', 'approved')->count();
             $totalRejected = Booking::where('user_id', auth()->id())->where('status', 'rejected')->count();

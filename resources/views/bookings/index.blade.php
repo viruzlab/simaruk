@@ -92,7 +92,7 @@
         <!-- Table -->
         <div class="bg-white rounded-2xl border border-surface-200/60 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm whitespace-nowrap">
+                <table class="w-full text-left text-sm">
                     <thead class="bg-surface-50 border-b border-surface-200/60 text-surface-500">
                         <tr>
                             <th scope="col" class="px-6 py-4 font-bold uppercase tracking-wider text-[11px]">ID Permintaan</th>
@@ -207,22 +207,8 @@
             </div>
             
             <!-- Pagination Footer -->
-            <div class="bg-surface-50 px-6 py-4 border-t border-surface-200/60 flex items-center justify-between">
-                <p class="text-sm font-medium text-surface-500">
-                    Menampilkan <span class="font-bold text-surface-900">{{ $bookings->count() }}</span> permintaan
-                </p>
-                <!-- Simple pagination placeholder matching design -->
-                <div class="flex items-center gap-1">
-                    <button class="w-8 h-8 rounded-lg border border-surface-200 bg-white flex items-center justify-center text-surface-400 hover:bg-surface-50 cursor-not-allowed">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-                    <button class="w-8 h-8 rounded-lg border-transparent bg-surface-600 flex items-center justify-center text-white font-bold text-sm">1</button>
-                    <button class="w-8 h-8 rounded-lg border border-surface-200 bg-white flex items-center justify-center text-surface-600 font-bold text-sm hover:bg-surface-50">2</button>
-                    <button class="w-8 h-8 rounded-lg border border-surface-200 bg-white flex items-center justify-center text-surface-600 font-bold text-sm hover:bg-surface-50">3</button>
-                    <button class="w-8 h-8 rounded-lg border border-surface-200 bg-white flex items-center justify-center text-surface-600 font-bold text-sm hover:bg-surface-50">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </button>
-                </div>
+            <div class="bg-surface-50 px-6 py-4 border-t border-surface-200/60">
+                {{ $bookings->links() }}
             </div>
         </div>
 
