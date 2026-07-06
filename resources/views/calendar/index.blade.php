@@ -127,7 +127,7 @@
     <!-- Event Detail Modal (Alpine.js) -->
     <div x-data="{ 
             open: false, 
-            event: { title: '', start: '', end: '', purpose: '', status: '', room: '', user: '', color: '' },
+            event: { title: '', start: '', end: '', purpose: '', status: '', room: '', user: '', color: '', activity_name: '' },
             showEvent(info) {
                 const e = info.event;
                 this.event = {
@@ -138,6 +138,7 @@
                     status: e.extendedProps.status,
                     room: e.extendedProps.room,
                     user: e.extendedProps.user,
+                    activity_name: e.extendedProps.activity_name,
                     color: e.backgroundColor
                 };
                 this.open = true;
@@ -171,6 +172,10 @@
                 </div>
                 
                 <div class="p-6 space-y-4">
+                    <div>
+                        <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Nama Kegiatan</p>
+                        <p class="text-sm font-medium text-surface-900" x-text="event.activity_name || '-'"></p>
+                    </div>
                     <div>
                         <p class="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1">Ruangan</p>
                         <p class="text-sm font-medium text-surface-900" x-text="event.room"></p>
