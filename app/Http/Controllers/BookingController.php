@@ -79,7 +79,7 @@ class BookingController extends Controller
                  . "<b>Kegiatan:</b> " . $booking->activity_name . "\n"
                  . "<b>Ruangan:</b> " . ($booking->room ? $booking->room->name : 'Unknown') . "\n"
                  . "<b>Waktu:</b> " . \Carbon\Carbon::parse($booking->start_time)->format('d M Y, H:i') . " - " . \Carbon\Carbon::parse($booking->end_time)->format('H:i') . "\n\n"
-                 . "Silakan cek di web Simaruk untuk menyetujui.";
+                 . "Cek & setujui sekarang: <a href='" . route('bookings.index') . "'>Buka Web Simaruk</a>";
 
         foreach ($admins as $admin) {
             $admin->notify(new \App\Notifications\BookingStatusNotification(
@@ -118,7 +118,8 @@ class BookingController extends Controller
             $message = "✅ <b>PENGAJUAN DISETUJUI</b>\n\n"
                      . "Halo <b>" . $booking->user->name . "</b>,\n"
                      . "Pengajuan peminjaman ruangan Anda untuk kegiatan <b>" . $booking->activity_name . "</b> telah disetujui oleh Admin.\n\n"
-                     . "Catatan Admin: " . ($request->admin_notes ?: "-");
+                     . "Catatan Admin: " . ($request->admin_notes ?: "-") . "\n\n"
+                     . "Lihat riwayat: <a href='" . route('bookings.index') . "'>Buka Web Simaruk</a>";
             
             $telegramService->sendToUser($booking->user, $message);
         }
@@ -141,7 +142,8 @@ class BookingController extends Controller
             $message = "❌ <b>PENGAJUAN DITOLAK</b>\n\n"
                      . "Halo <b>" . $booking->user->name . "</b>,\n"
                      . "Mohon maaf, pengajuan peminjaman ruangan Anda untuk kegiatan <b>" . $booking->activity_name . "</b> telah ditolak oleh Admin.\n\n"
-                     . "Alasan/Catatan: " . ($request->admin_notes ?: "-");
+                     . "Alasan/Catatan: " . ($request->admin_notes ?: "-") . "\n\n"
+                     . "Lihat detail: <a href='" . route('bookings.index') . "'>Buka Web Simaruk</a>";
             
             $telegramService->sendToUser($booking->user, $message);
         }
