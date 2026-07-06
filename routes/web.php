@@ -48,7 +48,7 @@ Route::get('/', function () {
 
         $events[] = [
             'id' => $booking->id,
-            'title' => $booking->activity_name ?: ($booking->room->name . ' - ' . $booking->user->name),
+            'title' => $booking->activity_name ?: (($booking->room?->name ?? 'Unknown Room') . ' - ' . ($booking->user?->name ?? 'Unknown User')),
             'start' => $booking->start_time->format('Y-m-d\TH:i:s'),
             'end' => $booking->end_time->format('Y-m-d\TH:i:s'),
             'color' => $color,
@@ -56,8 +56,8 @@ Route::get('/', function () {
                 'purpose' => $booking->purpose,
                 'activity_name' => $booking->activity_name,
                 'status' => $booking->status,
-                'room' => $booking->room->name,
-                'user' => $booking->user->name,
+                'room' => $booking->room?->name ?? 'Unknown Room',
+                'user' => $booking->user?->name ?? 'Unknown User',
             ]
         ];
     }
