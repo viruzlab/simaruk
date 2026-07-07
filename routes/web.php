@@ -88,16 +88,12 @@ Route::get('/dashboard', function () {
             ->take(5)
             ->get();
             
-        $colors = ['bg-primary-600', 'bg-sky-500', 'bg-accent-500', 'bg-amber-400', 'bg-emerald-500'];
         $activities = [];
         $totalPurposeCount = $activityStats->sum('count');
         foreach($activityStats as $index => $stat) {
             $pct = $totalPurposeCount > 0 ? round(($stat->count / $totalPurposeCount) * 100) : 0;
-            $color = $colors[$index % count($colors)];
             $activities[] = [
                 'name' => $stat->purpose,
-                'color' => $color,
-                'dot' => $color,
                 'pct' => $pct
             ];
         }

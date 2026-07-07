@@ -155,17 +155,23 @@
 
 
             <div class="space-y-5 mt-2">
-                @foreach($activities as $activity)
+                @php
+                    $colors = ['bg-indigo-500', 'bg-sky-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500'];
+                @endphp
+                @foreach($activities as $index => $activity)
+                @php
+                    $color = $colors[$index % count($colors)];
+                @endphp
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full {{ $activity['dot'] }}"></span>
+                            <span class="w-2.5 h-2.5 rounded-full {{ $color }}"></span>
                             <span class="text-xs font-medium text-surface-700">{{ $activity['name'] }}</span>
                         </div>
                         <span class="text-xs font-semibold text-surface-700">{{ $activity['pct'] }}%</span>
                     </div>
                     <div class="w-full h-2 bg-surface-100 rounded-full overflow-hidden">
-                        <div class="{{ $activity['color'] }} h-full rounded-full transition-all duration-700" style="width: {{ $activity['pct'] }}%"></div>
+                        <div class="{{ $color }} h-full rounded-full transition-all duration-700" style="width: {{ $activity['pct'] }}%"></div>
                     </div>
                 </div>
                 @endforeach
