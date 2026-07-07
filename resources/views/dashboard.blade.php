@@ -134,10 +134,12 @@
             @endphp
             <div class="flex items-end justify-between gap-3 h-44 px-2">
                 @foreach($weeklyStats as $index => $count)
-                <div class="flex-1 flex flex-col items-center gap-2">
+                <div class="flex-1 flex flex-col items-center gap-2 h-full">
                     <span class="text-[11px] font-medium text-surface-700/60">{{ $count }}</span>
-                    <div class="w-full rounded-t-lg transition-all duration-500 {{ $index === now()->dayOfWeekIso - 1 ? 'bg-primary-600' : 'bg-primary-200' }}"
-                         style="height: {{ $maxStat > 0 ? max(($count / $maxStat) * 100, 4) : 4 }}%">
+                    <div class="w-full flex-1 flex items-end">
+                        <div class="w-full rounded-t-lg transition-all duration-500 {{ $index === now()->dayOfWeekIso - 1 ? 'bg-primary-600' : 'bg-primary-200' }}"
+                             style="height: {{ $maxStat > 0 ? max(($count / $maxStat) * 100, 4) : 4 }}%">
+                        </div>
                     </div>
                     <span class="text-[11px] font-medium text-surface-700/60">{{ $days[$index] }}</span>
                 </div>
@@ -157,9 +159,9 @@
             <div class="space-y-4">
                 @foreach($activities as $activity)
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 w-20 flex-shrink-0">
-                        <span class="w-2.5 h-2.5 rounded-full {{ $activity['dot'] }}"></span>
-                        <span class="text-xs font-medium text-surface-700">{{ $activity['name'] }}</span>
+                    <div class="flex items-center gap-2 w-48 flex-shrink-0">
+                        <span class="w-2.5 h-2.5 rounded-full {{ $activity['dot'] }} flex-shrink-0"></span>
+                        <span class="text-xs font-medium text-surface-700 leading-tight">{{ $activity['name'] }}</span>
                     </div>
                     <div class="flex-1 h-2.5 bg-surface-100 rounded-full overflow-hidden">
                         <div class="{{ $activity['color'] }} h-full rounded-full transition-all duration-700" style="width: {{ $activity['pct'] }}%"></div>
