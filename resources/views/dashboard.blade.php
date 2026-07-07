@@ -157,6 +157,7 @@
 
 
             <div class="space-y-4">
+                <!-- Safelist for dynamic colors: bg-primary-600 bg-sky-500 bg-accent-500 bg-amber-400 bg-emerald-500 -->
                 @foreach($activities as $activity)
                 <div class="flex items-center gap-3">
                     <div class="flex items-center gap-2 w-48 flex-shrink-0">
