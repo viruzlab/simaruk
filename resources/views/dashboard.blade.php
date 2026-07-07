@@ -232,18 +232,10 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-2">
                                     @if(auth()->user()->role === 'admin' && $booking->status === 'pending')
-                                        <form action="{{ route('bookings.approve', $booking) }}" method="POST">
-                                            @csrf @method('PATCH')
-                                            <button type="submit" class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 hover:bg-emerald-200 flex items-center justify-center transition-colors" title="Setujui">
-                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('bookings.reject', $booking) }}" method="POST">
-                                            @csrf @method('PATCH')
-                                            <button type="submit" class="w-8 h-8 rounded-full bg-red-100 text-red-500 hover:bg-red-200 flex items-center justify-center transition-colors" title="Tolak">
-                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                            </button>
-                                        </form>
+                                        <a href="{{ route('bookings.show', $booking) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition-colors" title="Review Permohonan">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                            Review
+                                        </a>
                                     @else
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold
                                             {{ $booking->status === 'approved' ? 'bg-emerald-100 text-emerald-700' : '' }}
