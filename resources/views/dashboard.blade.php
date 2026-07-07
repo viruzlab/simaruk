@@ -132,11 +132,11 @@
                 $days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
                 $maxStat = max(max($weeklyStats), 1);
             @endphp
-            <div class="flex items-end justify-between gap-3 h-44 px-2">
+            <div class="flex items-end justify-between gap-3 h-44 px-2 pt-4">
                 @foreach($weeklyStats as $index => $count)
-                <div class="flex-1 flex flex-col items-center gap-2">
+                <div class="flex-1 flex flex-col items-center justify-end h-full gap-1">
                     <span class="text-[11px] font-medium text-surface-700/60">{{ $count }}</span>
-                    <div class="w-full rounded-t-lg transition-all duration-500 {{ $index === now()->dayOfWeekIso - 1 ? 'bg-primary-600' : 'bg-primary-200' }}"
+                    <div class="w-full rounded-t-lg transition-all duration-500 {{ $index === now()->dayOfWeekIso - 1 ? 'bg-indigo-600' : 'bg-indigo-100' }}"
                          style="height: {{ $maxStat > 0 ? max(($count / $maxStat) * 100, 4) : 4 }}%">
                     </div>
                     <span class="text-[11px] font-medium text-surface-700/60">{{ $days[$index] }}</span>
