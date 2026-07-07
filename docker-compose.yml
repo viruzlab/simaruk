@@ -60,5 +60,5 @@ networks:
 
 volumes:
   simaruk_mysql_data:
-    name: simaruk_simaruk-dbdata
+    name: simaruk_simaruk_mysql_data
     external: true
