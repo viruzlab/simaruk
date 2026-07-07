@@ -154,17 +154,19 @@
 
 
 
-            <div class="space-y-4">
+            <div class="space-y-5 mt-2">
                 @foreach($activities as $activity)
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 w-20 flex-shrink-0">
-                        <span class="w-2.5 h-2.5 rounded-full {{ $activity['dot'] }}"></span>
-                        <span class="text-xs font-medium text-surface-700">{{ $activity['name'] }}</span>
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full {{ $activity['dot'] }}"></span>
+                            <span class="text-xs font-medium text-surface-700">{{ $activity['name'] }}</span>
+                        </div>
+                        <span class="text-xs font-semibold text-surface-700">{{ $activity['pct'] }}%</span>
                     </div>
-                    <div class="flex-1 h-2.5 bg-surface-100 rounded-full overflow-hidden">
+                    <div class="w-full h-2 bg-surface-100 rounded-full overflow-hidden">
                         <div class="{{ $activity['color'] }} h-full rounded-full transition-all duration-700" style="width: {{ $activity['pct'] }}%"></div>
                     </div>
-                    <span class="text-xs font-semibold text-surface-700 w-10 text-right">{{ $activity['pct'] }}%</span>
                 </div>
                 @endforeach
             </div>
