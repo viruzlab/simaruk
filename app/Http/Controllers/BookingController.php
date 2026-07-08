@@ -151,6 +151,107 @@ class BookingController extends Controller
         return redirect()->back()->with('success', 'Peminjaman ditolak.');
     }
 
+    public function revoke(Request $request, Booking $booking)
+    {
+        $booking->update([
+            'status' => 'pending',
+            'admin_notes' => $request->admin_notes ?? 'Persetujuan dibatalkan oleh admin untuk perbaikan data.',
+        ]);
+
+        // Notify user that their booking was revoked back to pending
+        $booking->user->notify(new BookingStatusNotification(
+            $booking,
+            'Persetujuan peminjaman ruangan Anda telah dibatalkan oleh Admin untuk perbaikan. Silakan edit dan ajukan ulang.'
+        ));
+
+        // Telegram Notification for User
+        if ($booking->user && $booking->user->telegram_chat_id) {
+            $telegramService = new \App\Services\TelegramService();
+            $message = "⚠️ <b>PERSETUJUAN DIBATALKAN</b>\n\n"
+                     . "Halo <b>" . $booking->user->name . "</b>,\n"
+                     . "Persetujuan peminjaman ruangan Anda untuk kegiatan <b>" . $booking->activity_name . "</b> telah dibatalkan oleh Admin untuk perbaikan data.\n\n"
+                     . "Alasan: " . ($request->admin_notes ?: "Perbaikan data") . "\n\n"
+                     . "Silakan edit data dan ajukan ulang: <a href='" . route('bookings.edit', $booking) . "'>Edit Peminjaman</a>";
+
+            $telegramService->sendToUser($booking->user, $message);
+        }
+
+        return redirect()->back()->with('success', 'Persetujuan dibatalkan. Booking dikembalikan ke status Pending agar user dapat mengedit ulang.');
+    }
+
+    public function edit(Booking $booking)
+    {
+        // Only the owner can edit, and only if status is pending
+        if ($booking->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
+        if ($booking->status !== 'pending') {
+            return redirect()->route('bookings.show', $booking)
+                ->with('error', 'Hanya peminjaman dengan status pending yang dapat diedit.');
+        }
+
+        $rooms = Room::where('status', 'available')->get();
+        return view('bookings.edit', compact('booking', 'rooms'));
+    }
+
+    public function update(Request $request, Booking $booking)
+    {
+        // Only the owner can update, and only if status is pending
+        if ($booking->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
+        if ($booking->status !== 'pending') {
+            return redirect()->route('bookings.show', $booking)
+                ->with('error', 'Hanya peminjaman dengan status pending yang dapat diedit.');
+        }
+
+        $validated = $request->validate([
+            'room_id' => 'required|exists:rooms,id',
+            'start_time' => 'required|date|after_or_equal:today',
+            'end_time' => 'required|date|after:start_time',
+            'purpose' => 'required|string',
+            'activity_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'participants_count' => 'required|integer|min:1',
+        ]);
+
+        // Check for schedule overlap (excluding current booking)
+        $overlap = Booking::with('user')->where('room_id', $validated['room_id'])
+            ->where('id', '!=', $booking->id)
+            ->whereIn('status', ['pending', 'approved'])
+            ->where(function ($query) use ($validated) {
+                $query->where('start_time', '<', $validated['end_time'])
+                      ->where('end_time', '>', $validated['start_time']);
+            })
+            ->first();
+
+        if ($overlap) {
+            $booker = $overlap->user ? $overlap->user->name : 'Seseorang';
+            $activityName = $overlap->activity_name ?: $overlap->purpose;
+            $timeStart = \Carbon\Carbon::parse($overlap->start_time)->format('H:i');
+            $timeEnd = \Carbon\Carbon::parse($overlap->end_time)->format('H:i');
+
+            return back()->withInput()->withErrors([
+                'start_time' => "Ruangan ini sudah dibooking oleh {$booker} untuk kegiatan '{$activityName}' (pukul {$timeStart} - {$timeEnd}). Silakan pilih waktu atau ruangan lain."
+            ]);
+        }
+
+        $booking->update($validated);
+
+        // Notify admins about the updated booking
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new BookingStatusNotification(
+                $booking,
+                'Peminjaman #BK-' . $booking->created_at->format('Y') . '-' . str_pad($booking->id, 3, '0', STR_PAD_LEFT) . ' telah diperbarui oleh ' . auth()->user()->name . '. Silakan tinjau kembali.'
+            ));
+        }
+
+        return redirect()->route('bookings.show', $booking)->with('success', 'Data peminjaman berhasil diperbarui.');
+    }
+
     public function destroy(Booking $booking)
     {
         if (auth()->user()->role !== 'admin' && $booking->user_id !== auth()->id()) {

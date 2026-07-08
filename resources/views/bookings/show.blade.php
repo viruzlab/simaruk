@@ -277,6 +277,34 @@
                                 Dengan menyetujui, email notifikasi akan (segera) dikirimkan otomatis ke pemohon.
                             </p>
                         </form>
+                    @elseif(auth()->user()->role === 'admin' && in_array($booking->status, ['approved', 'rejected']))
+                        <!-- Admin can revoke approval/rejection -->
+                        @if($booking->admin_notes)
+                            <div class="mb-4">
+                                <p class="text-xs font-bold text-surface-500 mb-2">Catatan Admin Sebelumnya</p>
+                                <div class="bg-surface-50 border border-surface-200 rounded-xl p-4">
+                                    <p class="text-sm text-surface-700">{{ $booking->admin_notes }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('bookings.revoke', $booking) }}" onsubmit="return confirm('Yakin ingin membatalkan status ini? Booking akan dikembalikan ke status Pending agar user dapat mengedit ulang.')">
+                            @csrf
+                            @method('PATCH')
+                            
+                            <div class="mb-4">
+                                <label for="revoke_notes" class="block text-xs font-bold text-surface-500 mb-2">Alasan Pembatalan (Opsional)</label>
+                                <textarea id="revoke_notes" name="admin_notes" rows="3" class="w-full bg-surface-50 border border-surface-200 rounded-xl text-sm p-3 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500" placeholder="Contoh: Tanggal kegiatan salah, perlu diperbaiki..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full px-4 py-2.5 border border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 font-bold rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+                                Batalkan & Kembalikan ke Pending
+                            </button>
+                            <p class="text-[11px] text-center text-surface-400 mt-3">
+                                Status akan dikembalikan ke <strong>Pending</strong>. User akan mendapat notifikasi untuk mengedit dan mengajukan ulang.
+                            </p>
+                        </form>
                     @else
                         <!-- If already processed or user view -->
                         @if($booking->admin_notes)
@@ -290,6 +318,13 @@
                             <div class="bg-surface-50 rounded-xl p-4 text-center">
                                 <p class="text-sm text-surface-500 font-medium">Tidak ada catatan dari admin.</p>
                             </div>
+                        @endif
+
+                        @if($booking->status === 'pending' && $booking->user_id === auth()->id())
+                            <a href="{{ route('bookings.edit', $booking) }}" class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white hover:bg-blue-700 font-bold rounded-xl text-sm transition-colors shadow-sm">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                Edit Peminjaman
+                            </a>
                         @endif
                     @endif
                 </div>

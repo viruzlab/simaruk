@@ -146,6 +146,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('rooms', RoomController::class)->except(['index', 'show']);
         Route::patch('/bookings/{booking}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
         Route::patch('/bookings/{booking}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
+        Route::patch('/bookings/{booking}/revoke', [BookingController::class, 'revoke'])->name('bookings.revoke');
         
         // User Management
         Route::resource('users', App\Http\Controllers\UserController::class);
@@ -162,7 +163,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
     
     // User Bookings
-    Route::resource('bookings', BookingController::class)->except(['edit', 'update']);
+    Route::resource('bookings', BookingController::class);
     
     // Calendar
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');

@@ -189,6 +189,24 @@
                                                 </button>
                                             </form>
                                         @endif
+
+                                        @if(auth()->user()->role === 'admin' && in_array($booking->status, ['approved', 'rejected']))
+                                            <!-- Revoke / Batalkan Approval -->
+                                            <form action="{{ route('bookings.revoke', $booking) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin membatalkan status ini? Booking akan dikembalikan ke status Pending.')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="w-8 h-8 rounded-full bg-white border border-surface-200 flex items-center justify-center text-surface-400 hover:text-amber-600 hover:border-amber-200 hover:bg-amber-50 transition-colors shadow-sm" title="Batalkan Approval (Kembalikan ke Pending)">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        @if($booking->status === 'pending' && $booking->user_id === auth()->id())
+                                            <!-- Edit -->
+                                            <a href="{{ route('bookings.edit', $booking) }}" class="w-8 h-8 rounded-full bg-white border border-surface-200 flex items-center justify-center text-surface-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-colors shadow-sm" title="Edit Peminjaman">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

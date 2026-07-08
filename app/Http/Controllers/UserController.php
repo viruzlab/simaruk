@@ -40,6 +40,7 @@ class UserController extends Controller
             'nim_nip' => 'nullable|string|max:50',
             'study_program' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
+            'telegram_chat_id' => 'nullable|string|max:50',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -79,6 +80,7 @@ class UserController extends Controller
             'nim_nip' => 'nullable|string|max:50',
             'study_program' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
+            'telegram_chat_id' => 'nullable|string|max:50',
         ]);
 
         if (!empty($validated['password'])) {
