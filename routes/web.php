@@ -48,7 +48,7 @@ Route::get('/', function () {
 
         $events[] = [
             'id' => $booking->id,
-            'title' => $booking->activity_name ?: (optional($booking->room)->name . ' - ' . optional($booking->user)->name),
+            'title' => optional($booking->room)->name . ' - ' . $booking->purpose,
             'start' => $booking->start_time->format('Y-m-d\TH:i:s'),
             'end' => $booking->end_time->format('Y-m-d\TH:i:s'),
             'color' => $color,
