@@ -41,11 +41,16 @@
         </div>
     </div>
 
-    {{-- Picker Popup --}}
-    <div x-show="isOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 -translate-y-1" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+    {{-- Overlay --}}
+    <div x-show="isOpen" x-transition.opacity
+         style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 100;"
+         @click="cancelPicker()"></div>
+
+    {{-- Picker Modal --}}
+    <div x-show="isOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
          x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-         class="absolute z-50 mt-2 bg-white rounded-2xl shadow-2xl border border-surface-200/60 overflow-hidden" style="display:none; width: 320px;"
-         :class="popupPosition === 'top' ? 'bottom-full mb-2' : ''"
+         class="bg-white rounded-2xl shadow-2xl overflow-hidden" 
+         style="display:none; width: 320px; max-width: 90vw; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 101;"
          @click.stop>
 
         {{-- ===== HEADER ===== --}}
@@ -122,7 +127,8 @@
                     <template x-for="(day, index) in calendarDays" :key="index">
                         <button type="button"
                                 @click="day.date && selectDate(day)"
-                                class="relative w-10 h-10 mx-auto flex items-center justify-center text-sm rounded-full transition-all duration-150"
+                                style="width: 40px; height: 40px;"
+                                class="relative mx-auto flex items-center justify-center text-sm rounded-full transition-all duration-150"
                                 :class="{
                                     'cursor-default': !day.date,
                                     'text-surface-300 cursor-default': day.date && !day.currentMonth,
@@ -141,7 +147,8 @@
         {{-- ===== CLOCK DIAL VIEW ===== --}}
         <div x-show="mode === 'time'" class="p-6 flex flex-col items-center">
             {{-- Clock Face --}}
-            <div class="relative w-56 h-56 rounded-full bg-surface-100 border border-surface-200/60 mb-2"
+            <div class="rounded-full mb-2 mx-auto"
+                 style="width: 224px; height: 224px; background-color: #f3f4f6; border: 1px solid #e5e7eb; position: relative;"
                  x-ref="clockFace"
                  @mousedown.prevent="startClockDrag($event)"
                  @mousemove.prevent="onClockDrag($event)"
@@ -152,14 +159,13 @@
                  @touchend.prevent="endClockDrag($event)">
 
                 {{-- Center dot --}}
-                <div class="absolute top-1/2 left-1/2 w-2 h-2 -mt-1 -ml-1 bg-primary-600 rounded-full z-10"></div>
+                <div class="absolute top-1/2 left-1/2 w-2 h-2 -mt-1 -ml-1 bg-primary-600 rounded-full z-10" style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; margin-top: -4px; margin-left: -4px;"></div>
 
                 {{-- Clock hand --}}
-                <div class="absolute z-[5]"
-                     style="left: 50%; top: 50%;"
+                <div style="position: absolute; z-index: 5; left: 50%; top: 50%;"
                      :style="'width: 2px; margin-left: -1px; height: ' + (clockMode === 'hour' ? '70px' : '80px') + '; transform-origin: top center; transform: rotate(' + handAngle + 'deg);'">
-                    <div class="w-full h-full bg-primary-600 rounded-full"></div>
-                    <div class="absolute -bottom-3 left-1/2 -ml-3 w-6 h-6 bg-primary-600 rounded-full"></div>
+                    <div class="bg-primary-600 rounded-full" style="width: 100%; height: 100%;"></div>
+                    <div class="bg-primary-600 rounded-full" style="position: absolute; bottom: -12px; left: 50%; margin-left: -12px; width: 24px; height: 24px;"></div>
                 </div>
 
                 {{-- Hour numbers (outer ring 1-12) --}}
@@ -168,9 +174,9 @@
                         <template x-for="h in 12" :key="'ho'+h">
                             <button type="button"
                                     @click="selectHour(h === 12 ? 0 : h)"
-                                    class="absolute w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full transition-colors z-10"
+                                    class="text-xs font-bold transition-colors"
                                     :class="tempHour === (h === 12 ? 0 : h) ? 'bg-primary-600 text-white' : 'text-surface-800 hover:bg-primary-100'"
-                                    :style="getClockNumberStyle(h, 12, 90)">
+                                    :style="getClockNumberStyle(h, 12, 90, false)">
                                 <span x-text="h"></span>
                             </button>
                         </template>
@@ -178,9 +184,9 @@
                         <template x-for="h in 12" :key="'hi'+h">
                             <button type="button"
                                     @click="selectHour(h === 12 ? 12 : h + 12)"
-                                    class="absolute w-7 h-7 flex items-center justify-center text-[11px] font-semibold rounded-full transition-colors z-10"
+                                    class="text-[11px] font-semibold transition-colors"
                                     :class="tempHour === (h === 12 ? 12 : h + 12) ? 'bg-primary-600 text-white' : 'text-surface-500 hover:bg-primary-100'"
-                                    :style="getClockNumberStyle(h, 12, 58)">
+                                    :style="getClockNumberStyle(h, 12, 58, true)">
                                 <span x-text="h === 12 ? '00' : h + 12"></span>
                             </button>
                         </template>
@@ -193,9 +199,9 @@
                         <template x-for="m in 12" :key="'m'+m">
                             <button type="button"
                                     @click="selectMinute((m % 12) * 5)"
-                                    class="absolute w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full transition-colors z-10"
+                                    class="text-xs font-bold transition-colors"
                                     :class="tempMinute === ((m % 12) * 5) ? 'bg-primary-600 text-white' : 'text-surface-800 hover:bg-primary-100'"
-                                    :style="getClockNumberStyle(m, 12, 90)">
+                                    :style="getClockNumberStyle(m, 12, 90, false)">
                                 <span x-text="String((m % 12) * 5).padStart(2, '0')"></span>
                             </button>
                         </template>
@@ -481,14 +487,16 @@ function datetimePicker_{{ $uid }}(initialValue) {
         },
 
         // ===== Clock Dial Methods =====
-        getClockNumberStyle(num, total, radius) {
+        getClockNumberStyle(num, total, radius, isInner = false) {
             const angle = ((num % total) * 360 / total) - 90;
             const rad = angle * (Math.PI / 180);
-            const cx = 112; // half of 224px (w-56 = 14rem = 224px)
+            const cx = 112; // half of 224px
             const cy = 112;
-            const x = cx + radius * Math.cos(rad) - 16;
-            const y = cy + radius * Math.sin(rad) - 16;
-            return `left: ${x}px; top: ${y}px;`;
+            const offset = isInner ? 14 : 16;
+            const x = cx + radius * Math.cos(rad) - offset;
+            const y = cy + radius * Math.sin(rad) - offset;
+            const size = isInner ? 28 : 32;
+            return `position: absolute; left: ${x}px; top: ${y}px; width: ${size}px; height: ${size}px; display: flex; align-items: center; justify-content: center; border-radius: 50%; z-index: 10;`;
         },
 
         selectHour(h) {
