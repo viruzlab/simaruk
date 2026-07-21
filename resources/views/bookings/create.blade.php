@@ -148,13 +148,25 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-surface-800 mb-2">Waktu Mulai <span class="text-red-500">*</span></label>
-                                <input x-model="formData.start_time" type="datetime-local" name="start_time" class="w-full rounded-xl border-surface-200 shadow-sm focus:border-primary-500 focus:ring-primary-500/40 text-sm py-2.5 px-4 font-medium">
+                                <x-datetime-picker
+                                    name="start_time"
+                                    :value="old('start_time', '')"
+                                    placeholder="Pilih waktu mulai"
+                                    id="start_time_picker"
+                                    x-on:datetime-change="formData.start_time = $event.detail.value"
+                                />
                                 <p x-show="validationErrors.start_time" class="text-red-500 text-xs mt-1 font-medium" x-text="validationErrors.start_time"></p>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-surface-800 mb-2">Waktu Selesai <span class="text-red-500">*</span></label>
-                                <input x-model="formData.end_time" type="datetime-local" name="end_time" class="w-full rounded-xl border-surface-200 shadow-sm focus:border-primary-500 focus:ring-primary-500/40 text-sm py-2.5 px-4 font-medium">
+                                <x-datetime-picker
+                                    name="end_time"
+                                    :value="old('end_time', '')"
+                                    placeholder="Pilih waktu selesai"
+                                    id="end_time_picker"
+                                    x-on:datetime-change="formData.end_time = $event.detail.value"
+                                />
                                 <p x-show="validationErrors.end_time" class="text-red-500 text-xs mt-1 font-medium" x-text="validationErrors.end_time"></p>
                             </div>
                         </div>
