@@ -162,10 +162,9 @@
                 <div class="absolute top-1/2 left-1/2 w-2 h-2 -mt-1 -ml-1 bg-primary-600 rounded-full z-10" style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; margin-top: -4px; margin-left: -4px;"></div>
 
                 {{-- Clock hand --}}
-                <div style="position: absolute; z-index: 5; left: 50%; top: 50%;"
-                     :style="'width: 2px; margin-left: -1px; height: ' + (clockMode === 'hour' ? '70px' : '80px') + '; transform-origin: top center; transform: rotate(' + handAngle + 'deg);'">
+                <div :style="'position: absolute; z-index: 5; left: 50%; bottom: 50%; width: 2px; margin-left: -1px; transform-origin: bottom center; transform: rotate(' + handAngle + 'deg); height: ' + handHeight + 'px;'">
                     <div class="bg-primary-600 rounded-full" style="width: 100%; height: 100%;"></div>
-                    <div class="bg-primary-600 rounded-full" style="position: absolute; bottom: -12px; left: 50%; margin-left: -12px; width: 24px; height: 24px;"></div>
+                    <div class="bg-primary-600 rounded-full" style="position: absolute; top: -12px; left: 50%; margin-left: -12px; width: 24px; height: 24px;"></div>
                 </div>
 
                 {{-- Hour numbers (outer ring 1-12) --}}
@@ -280,6 +279,13 @@ function datetimePicker_{{ $uid }}(initialValue) {
                 return (this.tempHour % 12) * 30;
             }
             return this.tempMinute * 6;
+        },
+
+        get handHeight() {
+            if (this.clockMode === 'hour') {
+                return (this.tempHour === 0 || this.tempHour > 12) ? 58 : 90;
+            }
+            return 90;
         },
 
         get yearRange() {
