@@ -95,40 +95,46 @@
             </div>
 
             {{-- Year Selector --}}
-            <div x-show="showYearSelector" x-transition class="mb-4 max-h-48 overflow-y-auto rounded-xl border border-surface-200 bg-surface-50 p-2 grid grid-cols-4 gap-1">
-                <template x-for="y in yearRange" :key="y">
-                    <button type="button" @click="viewYear = y; showYearSelector = false; buildCalendar()"
-                            class="px-2 py-1.5 text-xs font-semibold rounded-lg transition-colors"
-                            :class="y === viewYear ? 'bg-primary-600 text-white' : 'text-surface-700 hover:bg-primary-50 hover:text-primary-700'">
-                        <span x-text="y"></span>
-                    </button>
-                </template>
+            <div x-show="showYearSelector" x-transition>
+                <div class="mb-4 max-h-48 overflow-y-auto rounded-xl border border-surface-200 bg-surface-50 p-2" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
+                    <template x-for="y in yearRange" :key="y">
+                        <button type="button" @click="viewYear = y; showYearSelector = false; buildCalendar()"
+                                class="px-2 py-1.5 text-xs font-semibold rounded-lg transition-colors"
+                                :class="y === viewYear ? 'bg-primary-600 text-white' : 'text-surface-700 hover:bg-primary-50 hover:text-primary-700'">
+                            <span x-text="y"></span>
+                        </button>
+                    </template>
+                </div>
             </div>
 
             {{-- Day Headers --}}
-            <div x-show="!showYearSelector" class="grid grid-cols-7 gap-0 mb-2">
-                <template x-for="d in dayLabels" :key="d">
-                    <div class="text-center text-[11px] font-bold text-surface-400 uppercase py-1" x-text="d"></div>
-                </template>
+            <div x-show="!showYearSelector">
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr);" class="mb-2">
+                    <template x-for="d in dayLabels" :key="d">
+                        <div class="text-center text-[11px] font-bold text-surface-400 uppercase py-1" x-text="d"></div>
+                    </template>
+                </div>
             </div>
 
             {{-- Calendar Days --}}
-            <div x-show="!showYearSelector" class="grid grid-cols-7 gap-0">
-                <template x-for="(day, index) in calendarDays" :key="index">
-                    <button type="button"
-                            @click="day.date && selectDate(day)"
-                            class="relative w-10 h-10 mx-auto flex items-center justify-center text-sm rounded-full transition-all duration-150"
-                            :class="{
-                                'cursor-default': !day.date,
-                                'text-surface-300 cursor-default': day.date && !day.currentMonth,
-                                'text-surface-700 hover:bg-primary-50 hover:text-primary-700 cursor-pointer font-medium': day.date && day.currentMonth && !day.isSelected && !day.isToday,
-                                'text-primary-600 font-bold ring-1 ring-primary-300': day.isToday && !day.isSelected,
-                                'bg-primary-600 text-white font-bold shadow-md shadow-primary-600/30': day.isSelected,
-                            }"
-                            :disabled="!day.date || !day.currentMonth">
-                        <span x-text="day.date ? day.date.getDate() : ''"></span>
-                    </button>
-                </template>
+            <div x-show="!showYearSelector">
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr);">
+                    <template x-for="(day, index) in calendarDays" :key="index">
+                        <button type="button"
+                                @click="day.date && selectDate(day)"
+                                class="relative w-10 h-10 mx-auto flex items-center justify-center text-sm rounded-full transition-all duration-150"
+                                :class="{
+                                    'cursor-default': !day.date,
+                                    'text-surface-300 cursor-default': day.date && !day.currentMonth,
+                                    'text-surface-700 hover:bg-primary-50 hover:text-primary-700 cursor-pointer font-medium': day.date && day.currentMonth && !day.isSelected && !day.isToday,
+                                    'text-primary-600 font-bold ring-1 ring-primary-300': day.isToday && !day.isSelected,
+                                    'bg-primary-600 text-white font-bold shadow-md shadow-primary-600/30': day.isSelected,
+                                }"
+                                :disabled="!day.date || !day.currentMonth">
+                            <span x-text="day.date ? day.date.getDate() : ''"></span>
+                        </button>
+                    </template>
+                </div>
             </div>
         </div>
 
