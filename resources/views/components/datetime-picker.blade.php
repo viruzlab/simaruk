@@ -14,8 +14,7 @@
     x-data="datetimePicker_{{ $uid }}('{{ $value }}')"
     x-init="init()"
     @click.outside="cancelPicker()"
-    class="relative w-full"
-    id="{{ $uid }}_wrapper"
+    {{ $attributes->merge(['class' => 'relative w-full', 'id' => $uid . '_wrapper']) }}
 >
     {{-- Hidden input for form submission --}}
     <input type="hidden" name="{{ $name }}" :value="selectedDateTime" x-ref="hiddenInput">
